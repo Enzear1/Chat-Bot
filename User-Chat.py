@@ -1,3 +1,4 @@
+
 import requests
 import json
 import threading
@@ -7,15 +8,16 @@ name = ''
 server = ''
 
 def getChat():
+    global server
     response = requests.get(f'{server}/getChat')
     print('-------New-------')
     resp = response.text
     y = json.loads(resp)
-    for i in range(1,int(y['total']) + 1):
-        dat = y[str(i)]
-        print(list(dat.keys())[0] + '>> ' + list(dat.values())[0])
+    for item in y.values():
+        print(str(list(item.keys())[0]) + ">> " + str(list(item.values())[0]))
     print('-------CHAT-------')
 def main():
+    global server
     server = input('Введите ip/port Сервера>> ')
     inpName = True
     while inpName:
@@ -23,9 +25,12 @@ def main():
         if(name == ''):
             print('Некорректное имя!')
         else:
-            response = requests.get(f'{server}/usersEvent',params = {
+            try:
+                response = requests.get(f'{server}/usersEvent',params = {
                 'eventName' : 'addUserName',
                 'name' : name})
+            except Exception:
+                print(Exception)
             if(response.text == '301'):
                 inpName = False
                 break
@@ -37,10 +42,13 @@ def main():
         if(msg == ''):
             getChat()
         else:
-            response = requests.get(f'{server}/usersEvent',params = {
-                'eventName' : 'sendMessage',
-                'name' : name,
-                'msg' : msg})
+            try:
+                response = requests.get(f'{server}/usersEvent',params = {
+                    'eventName' : 'sendMessage',
+                    'name' : name,
+                    'msg' : msg})
+            except Exception:
+                print(Exception)
             getChat()
         time.sleep(0.5)
 if __name__ == '__main__':
