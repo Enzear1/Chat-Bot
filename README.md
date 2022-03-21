@@ -1,4 +1,4 @@
 # Chat-Bot
+python v3.10
 simple chat bot
-You need to create server or create local server and open ports -> You get a server ip and start Server.js (Node Js Express)
-In User-Chat you need to input server ip in open
+You need to start Server.js and connect by the User-Chat.py client
